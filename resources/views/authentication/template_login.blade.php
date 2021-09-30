@@ -51,15 +51,15 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address..." name="member_email">
+                                                placeholder="Enter Email Address..." name="email">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password" name="member_password">
+                                                id="exampleInputPassword" placeholder="Password" name="password">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck" name="remember_me">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck" name="remember_me" value="1">
                                                 <label class="custom-control-label" for="customCheck" >Remember
                                                     Me</label>
                                             </div>

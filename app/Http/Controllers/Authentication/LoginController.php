@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Authentication;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -14,18 +15,43 @@ class LoginController extends Controller
 
     }
 
-    public function checkLogin(LoginRequest $request) {
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function authenticate(LoginRequest $request)
+    {
+        $credentials = $request->validated();
+        $credentials['status'] = 'active';
+        $remember = $request->input('remember_me', false); // $request->remember_me
 
-        // $data = $request->all();
-        // $data = $request->only(['member_email', 'member_password']);
-        // $data = $request->except(['member_email', 'member_password']);
-        // $data = $request->input('member_email');
-        // $data = $request->member_email;
-        // $data = $request->validate(['member_email' => ['required']]);
-        $data = $request->validated();
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
 
-        dd($data);
-        // Die and Dump
+            return redirect()->intended('dashboard');
+        }
 
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

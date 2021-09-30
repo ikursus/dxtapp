@@ -25,8 +25,8 @@ class LoginRequest extends FormRequest
     {
         return [
             //'member_email' => 'required|email',
-            'member_email' => ['required', 'email:filter'],
-            'member_password' => 'required'
+            'email' => ['required', 'email:filter'],
+            'password' => ['required'],
         ];
     }
 }

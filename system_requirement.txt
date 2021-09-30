@@ -1,0 +1,10 @@
+
+
+Membership system
+
+Database
+
+1) users (plural) / Model, Controller - user (singular)
+2) memberships
+3) user_membership
+4) roles
