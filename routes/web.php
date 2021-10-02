@@ -25,6 +25,7 @@ Route::group([
 
     // Route::resource('users', UserController::class);
     // Memaparkan senarai users
+    Route::get('users/datatables', [UserController::class, 'datatables'])->name('users.datatables');
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     // Memaparkan borang tambah rekod user
     Route::get('users/create', [UserController::class, 'create'])->name('users.create');

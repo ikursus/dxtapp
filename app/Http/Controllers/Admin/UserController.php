@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
@@ -11,6 +12,17 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    public function datatables()
+    {
+        $query = User::query();
+
+        return DataTables::of($query)
+        ->addIndexColumn()
+        ->addColumn('tindakan', function ($user) {
+            return view('admin.users.tindakan', compact('user'));
+        })
+        ->make(true); // ->toJson();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,13 +36,14 @@ class UserController extends Controller
         // // ->where('username', '=', 'ali')
         // ->orderBy('id', 'desc')
         // ->paginate(5); //->get();
-        $senaraiUsers = User::orderBy('id', 'desc')->paginate(5);
+        // $senaraiUsers = User::orderBy('id', 'desc')->paginate(5);
 
         // Die and dump
         // dd($senaraiUsers);
 
         // Cara 1 nak pass variable ke template
-        return view('admin.users.index')->with('senaraiUsers', $senaraiUsers);
+        // return view('admin.users.index')->with('senaraiUsers', $senaraiUsers);
+        return view('admin.users.index');
     }
 
     /**
