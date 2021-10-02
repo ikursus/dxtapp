@@ -67,7 +67,7 @@ class MembershipController extends Controller
      */
     public function edit(Membership $membership)
     {
-        return view('admin.memberships.edit');
+        return view('admin.memberships.edit', compact('membership'));
     }
 
     /**
@@ -79,7 +79,12 @@ class MembershipController extends Controller
      */
     public function update(MembershipRequest $request, Membership $membership)
     {
-        //
+        //$data = $request->validated();
+        //$membership->update($data);
+        $membership->update($request->validated());
+
+        return redirect()->route('memberships.index')
+        ->with('mesej-sukses', 'Rekod berjaya dikemaskini');
     }
 
     /**
@@ -90,6 +95,9 @@ class MembershipController extends Controller
      */
     public function destroy(Membership $membership)
     {
-        //
+        $membership->delete();
+
+        return redirect()->route('memberships.index')
+        ->with('mesej-sukses', 'Rekod berjaya dihapuskan');
     }
 }
