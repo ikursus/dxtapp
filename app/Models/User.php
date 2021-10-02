@@ -8,9 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+// Nama model = Singular
+// Nama table = plural
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    // Maklumkan kepada model ini nama table yang harus digunakan
+    // protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -19,8 +25,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'status'
     ];
 
     /**

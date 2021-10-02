@@ -19,11 +19,12 @@ class UserController extends Controller
     public function index()
     {
         // $senaraiUsers = DB::table('users')->get();
-        $senaraiUsers = DB::table('users')
-        // ->where('status', '=', 'active')
-        // ->where('username', '=', 'ali')
-        ->orderBy('id', 'desc')
-        ->paginate(5); //->get();
+        // $senaraiUsers = DB::table('users')
+        // // ->where('status', '=', 'active')
+        // // ->where('username', '=', 'ali')
+        // ->orderBy('id', 'desc')
+        // ->paginate(5); //->get();
+        $senaraiUsers = User::orderBy('id', 'desc')->paginate(5);
 
         // Die and dump
         // dd($senaraiUsers);
@@ -53,7 +54,18 @@ class UserController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($request->password); // Hash::make($request->password);
 
-        DB::table('users')->insert($data);
+        // DB::table('users')->insert($data);
+        User::create($data);
+        // Bila nak guna create(), kena setkan mass assignment pada model User
+        // protected $fillable
+        // Cara 2 simpan data
+        // $user = new User;
+        // $user->name = $request->name; // $request->input('name');
+        // $user->username = $request->username; // $request->input('name');
+        // $user->email = $request->email; // $request->input('email');
+        // $user->password = bcrypt($request->password); // $request->input('password');
+        // $user->status = $request->status; // $request->input('status');
+        // $user->save();
 
         return redirect()->route('users.index')
         ->with('mesej-sukses', 'Rekod berjaya ditambah!');
@@ -81,6 +93,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         // $user = User::findOrFail($id);
+        // $user = DB::table('users')->where('id', '=',$id)->first();
 
         return view('admin.users.edit')->with('user', $user);
     }
@@ -101,6 +114,7 @@ class UserController extends Controller
             $data['password'] = bcrypt($request->password);
         }
 
+        // $user = DB::table('users')->where('id', '=', $id)->update($data);
         $user->update($data);
 
         return redirect()->route('users.index')
@@ -113,8 +127,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        // DB::table('users')->where('id', '=',$id)->delete();
+        $user->delete();
+
+        return redirect()->route('users.index')
+        ->with('mesej-sukses', 'Rekod berjaya di hapuskan');
     }
 }
