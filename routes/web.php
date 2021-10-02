@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MembershipController;
 use App\Http\Controllers\Authentication\LoginController;
 
 
@@ -37,6 +38,9 @@ Route::group([
     Route::patch('users/{user}', [UserController::class, 'update'])->name('users.update');
     // Digunakan untuk delete rekod
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Membership routing
+    Route::resource('memberships', MembershipController::class);
 
 });
 

@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('/') }}themes/sb-admin/css/sb-admin-2.min.css" rel="stylesheet">
-
+    @yield('css_custom')
 </head>
 
 <body id="page-top">
@@ -318,7 +318,7 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('/') }}themes/sb-admin/js/demo/chart-area-demo.js"></script>
     <script src="{{ asset('/') }}themes/sb-admin/js/demo/chart-pie-demo.js"></script>
-
+    @stack('js_custom')
 </body>
 
 </html>
