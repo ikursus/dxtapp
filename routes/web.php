@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Authentication\LoginController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Authentication\LoginController;
 
 
 Route::get('/', function () {
@@ -14,53 +15,30 @@ Route::get('login', [LoginController::class, 'paparBorang'])->name('login');
 Route::post('login', [LoginController::class, 'authenticate'])->name('login.check');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
-
-// closure
-Route::get('profile/{username?}/{status?}', function ($username = null, $status = 'tiada rekod') {
-
-    if (is_null($username))
-    {
-        return 'Tiada rekod username dijumpai. Sila cuba lagi!';
-    }
-
-    return 'Ini adalah halaman profile bagi akaun: ' . $username . ' status = ' . $status;
-});
-
-Route::get('contoh1', function () {
-
-    $senaraiPelajar = [
-        ['id' => 1, 'nama' => 'Ahmad', 'email' => 'ahmad@gmail.com'],
-        ['id' => 2, 'nama' => 'Ali', 'email' => 'ali@gmail.com'],
-        ['id' => 3, 'nama' => 'Siti', 'email' => 'siti@gmail.com'],
-    ];
-
-    $pageTitle = config('app.name');
-
-    // Cara 1
-    // return view('contoh1')->with('senaraiPelajar', $senaraiPelajar)->with('senaraiPelajar', $senaraiPelajar);
-    // Cara 2
-    // return view('contoh1', ['senaraiPelajar' => $senaraiPelajar, 'pageTitle' => $pageTitle]);
-    // Cara 3
-    return view('contoh1', compact('senaraiPelajar', 'pageTitle'));
-
-})->name('contoh');
-
-Route::get('user/{id}', function($id) {
-    return $id;
-})->where('id', '[a-zA-Z0-9]+');
-
 Route::group([
     'middleware' => 'auth',
     'prefix' => 'admin'
 ], function () {
 
-    Route::get('/dashboard', function () {return null;});
-    Route::get('/users', function () {return null;});
-    Route::get('/account', function () {return null;});
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+
+    Route::resource('users', UserController::class);
+    // Memaparkan senarai users
+    // Route::get('users', [UserController::class, 'index'])->name('users.index');
+    // // Memaparkan borang tambah rekod user
+    // Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    // // Menerima data dari borang tambah rekod user dan simpan ke dalam db
+    // Route::post('users/create', [UserController::class, 'store'])->name('users.store');
+    // // Memaparkan detail user
+    // Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    // // Memaparkan borang edit detail user
+    // Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    // // Menerima data dari borang edit detail user dan update/kemaskini detail dalam db
+    // Route::patch('users/{user}', [UserController::class, 'update'])->name('users.update');
+    // // Digunakan untuk delete rekod
+    // Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 });
 
-
-Route::resource('users', UserController::class);
 
 

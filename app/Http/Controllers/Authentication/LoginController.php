@@ -30,6 +30,8 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
+            // 1 Laravel Authentication akan ada tak page yang kita nak buka sblm login?
+            // Kalau tak ada, redirect ke dashboard
             return redirect()->intended('dashboard');
         }
 

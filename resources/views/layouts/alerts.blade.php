@@ -7,3 +7,9 @@
         </ul>
     </div>
 @endif
+
+@if (session('mesej-sukses'))
+    <div class="alert alert-success">
+        {!! session('mesej-sukses') !!}
+    </div>
+@endif

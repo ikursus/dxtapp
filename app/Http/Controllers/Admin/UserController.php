@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -13,7 +16,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        // $senaraiUsers = DB::table('users')->get();
+        $senaraiUsers = DB::table('users')
+        // ->where('status', '=', 'active')
+        // ->where('username', '=', 'ali')
+        ->orderBy('id', 'desc')
+        ->paginate(5); //->get();
+
+        // Die and dump
+        // dd($senaraiUsers);
+
+        // Cara 1 nak pass variable ke template
+        return view('admin.users.index')->with('senaraiUsers', $senaraiUsers);
     }
 
     /**
@@ -23,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -34,7 +48,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'min:3'],
+            'username' => ['required', 'unique:users,username'],
+            'email' => ['required', 'unique:users,email', 'email:filter'],
+            'password' => ['required', Password::min(3)],
+            'status' => ['required', 'in:pending,active,banned']
+        ]);
+
+        DB::table('users')->insert($data);
+
+        return redirect()->route('users.index')
+        ->with('mesej-sukses', 'Rekod berjaya ditambah!');
     }
 
     /**
@@ -45,7 +70,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('admin.users.show');
     }
 
     /**
@@ -56,7 +81,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.users.edit');
     }
 
     /**
@@ -81,5 +106,4 @@ class UserController extends Controller
     {
         //
     }
-    // Resource function / method
 }
