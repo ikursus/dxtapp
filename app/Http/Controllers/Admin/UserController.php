@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserFormRequest;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -46,15 +48,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserFormRequest $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'min:3'],
-            'username' => ['required', 'unique:users,username'],
-            'email' => ['required', 'unique:users,email', 'email:filter'],
-            'password' => ['required', Password::min(3)],
-            'status' => ['required', 'in:pending,active,banned']
-        ]);
+        $data = $request->validated();
+        $data['password'] = bcrypt($request->password); // Hash::make($request->password);
 
         DB::table('users')->insert($data);
 
@@ -70,7 +67,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('admin.users.show');
+        $user = User::findOrFail($id);
+
+        return view('admin.users.show')->with('user', $user);
     }
 
     /**
@@ -79,9 +78,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        return view('admin.users.edit');
+        // $user = User::findOrFail($id);
+
+        return view('admin.users.edit')->with('user', $user);
     }
 
     /**
@@ -91,9 +92,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserFormRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+
+        if (!is_null($request->password))
+        {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('users.index')
+        ->with('mesej-sukses', 'Rekod berjaya dikemaskini');
     }
 
     /**
