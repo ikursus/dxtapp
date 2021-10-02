@@ -33,6 +33,7 @@ Route::group([
     Route::post('users/create', [UserController::class, 'store'])->name('users.store');
     // Memaparkan detail user
     Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::post('users/{user}/memberships', [UserController::class, 'subscribe'])->name('users.memberships.subscribe');
     // Memaparkan borang edit detail user
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     // Menerima data dari borang edit detail user dan update/kemaskini detail dalam db

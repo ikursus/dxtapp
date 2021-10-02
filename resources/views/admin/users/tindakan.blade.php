@@ -1,4 +1,5 @@
 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-md btn-info">EDIT</a>
+<a href="{{ route('users.show', $user->id) }}" class="btn btn-md btn-warning">VIEW</a>
 <button type="button" class="btn btn-md btn-danger" data-toggle="modal" data-target="#modal-delete-{{ $user->id }}">DELETE</button>
 
 <!-- Modal Delete -->

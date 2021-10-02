@@ -8,6 +8,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
+use App\Models\Membership;
+use App\Models\Subscription;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -93,8 +95,9 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
+        $memberships = Membership::select('id', 'name')->get();
 
-        return view('admin.users.show')->with('user', $user);
+        return view('admin.users.show')->with('user', $user)->with('memberships', $memberships);
     }
 
     /**
@@ -147,5 +150,28 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
         ->with('mesej-sukses', 'Rekod berjaya di hapuskan');
+    }
+
+    public function subscribe(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'membership_id' => ['required', 'integer']
+        ]);
+
+        // Cara pertama menerusi Subscription Model
+        // Menerusi Model - protected $fillable
+        // $data['user_id'] = $user->id; // Cara 1
+        // Subscription::create($data); // Cara 1
+
+        // $subscription = new Subscription();  // Cara 1
+        // $subscription->user_id = $user->id;  // Cara 1
+        // $subscription->membership_id = $request->input('membership_id');  // Cara 1
+        // $subscription->save();  // Cara 1
+
+        // Cara yang kedua menerusi relation antara user kepada subscription
+        $user->subscriptions()->create($data);
+
+        return redirect()->route('users.show', $user->id)
+        ->with('mesej-sukses', 'Subscription telahpun berjaya!');
     }
 }
