@@ -28,8 +28,8 @@ class UserFormRequest extends FormRequest
         if ($this->route()->named('users.update')) {
             return [
                 'name' => ['required', 'min:3'],
-                // 'username' => ['required', 'unique:users,username,' . $this->user->id],
-                // 'email' => ['required', 'email:filter', 'unique:users,email,' . $this->user->id],
+                'username' => ['required', 'unique:users,username,' . $this->user->id],
+                'email' => ['required', 'email:filter', 'unique:users,email,' . $this->user->id],
                 'status' => ['required', 'in:pending,active,banned'],
                 'role' => ['required', 'in:admin,user']
             ];

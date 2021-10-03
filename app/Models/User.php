@@ -75,4 +75,16 @@ class User extends Authenticatable
 
         return false;
     }
+
+    // Set accessor
+    public function getNameAttribute($value)
+    {
+        // PHP function strtoupper (besarkan semua huruf)
+        return strtoupper($value);
+    }
+
+    // public function setUsernameAttribute($value)
+    // {
+    //     $this->attributes['username'] = strtoupper($value);
+    // }
 }

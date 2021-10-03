@@ -75,7 +75,32 @@ class UserController extends Controller
         $data['password'] = bcrypt($request->password); // Hash::make($request->password);
 
         // DB::table('users')->insert($data);
-        User::create($data);
+        // Transaction 1 - Create User Akaun
+        try {
+            DB::beginTransaction();
+
+            $user = User::create($data);
+            // Transaction 2 - Create User Subscription
+            Subscription::create([
+                'user_id' => $user->id,
+                'membership_ids' => 1
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('users.index')
+            ->with('mesej-sukses', 'Rekod berjaya ditambah!');
+
+        } catch (\Throwable $th) {
+
+            DB::rollBack();
+
+            // abort(404)
+            return redirect()->route('users.index')
+            ->withErrors('Ada masalah dengan pembinaan akaun.' . $th->getMessage());
+        }
+
+
         // Bila nak guna create(), kena setkan mass assignment pada model User
         // protected $fillable
         // Cara 2 simpan data
@@ -87,8 +112,7 @@ class UserController extends Controller
         // $user->status = $request->status; // $request->input('status');
         // $user->save();
 
-        return redirect()->route('users.index')
-        ->with('mesej-sukses', 'Rekod berjaya ditambah!');
+
     }
 
     /**
@@ -130,6 +154,9 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
+        // $request->except('password');
+        // $request->validated();
+
         if (!is_null($request->password))
         {
             $data['password'] = bcrypt($request->password);
@@ -137,6 +164,8 @@ class UserController extends Controller
 
         // $user = DB::table('users')->where('id', '=', $id)->update($data);
         $user->update($data);
+        // $user->username = $request->username;
+        // $user->save();
 
         return redirect()->route('users.index')
         ->with('mesej-sukses', 'Rekod berjaya dikemaskini');
