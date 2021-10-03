@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Authentication\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\DashboardController;
+
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserMembershipController;
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\Authentication\ForgotPasswordController;
 
 
 Route::redirect('/', 'login');
@@ -28,4 +29,5 @@ Route::group([
     Route::get('memberships', [UserMembershipController::class, 'index'])->name('user.memberships.index');
     Route::get('memberships/create', [UserMembershipController::class, 'create'])->name('user.memberships.create');
     Route::post('memberships/create', [UserMembershipController::class, 'store'])->name('user.memberships.store');
+    Route::get('notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
 });

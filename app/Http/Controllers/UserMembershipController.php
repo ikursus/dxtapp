@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Membership;
 use Illuminate\Http\Request;
+use App\Notifications\MembershipSubscribed;
 
 class UserMembershipController extends Controller
 {
@@ -32,7 +34,15 @@ class UserMembershipController extends Controller
             return redirect()->back()->withErrors('Anda sudah subscribe kepada membership yang dipilih');
         }
 
-        auth()->user()->subscriptions()->create($data);
+        $subscription = auth()->user()->subscriptions()->create($data);
+
+        // Notification
+        $admins = User::where('role', '=', 'admin')->get();
+
+        foreach( $admins as $admin)
+        {
+            $admin->notify(new MembershipSubscribed($subscription));
+        }
 
         return redirect()->route('user.memberships.index')
         ->with('mesej-sukses', 'Subscription berjaya!');

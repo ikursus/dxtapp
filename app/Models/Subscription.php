@@ -18,6 +18,11 @@ class Subscription extends Model
         // return $this->belongsTo(Membership::class, 'membership_id', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function totalSubscribed()
     {
         return self::count();
