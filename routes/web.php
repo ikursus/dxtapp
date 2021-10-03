@@ -1,47 +1,31 @@
 <?php
 
+use App\Http\Controllers\Authentication\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\MembershipController;
+
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserMembershipController;
 use App\Http\Controllers\Authentication\LoginController;
 
 
-Route::get('/', function () {
-    // return '<a href="'. route('contoh') .'">Klik Sini</a>';
-    return view('welcome');
-});
+Route::redirect('/', 'login');
 
 Route::get('login', [LoginController::class, 'paparBorang'])->name('login');
 Route::post('login', [LoginController::class, 'authenticate'])->name('login.check');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetLink'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
 Route::group([
-    'middleware' => ['auth', 'checkAdminRole'],
-    'prefix' => 'admin'
+    'middleware' => ['auth'],
 ], function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('dashboard', [DashboardController::class, 'index']);
 
-    // Route::resource('users', UserController::class);
-    // Memaparkan senarai users
-    Route::get('users/datatables', [UserController::class, 'datatables'])->name('users.datatables');
-    Route::get('users', [UserController::class, 'index'])->name('users.index');
-    // Memaparkan borang tambah rekod user
-    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
-    // Menerima data dari borang tambah rekod user dan simpan ke dalam db
-    Route::post('users/create', [UserController::class, 'store'])->name('users.store');
-    // Memaparkan detail user
-    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
-    Route::post('users/{user}/memberships', [UserController::class, 'subscribe'])->name('users.memberships.subscribe');
-    // Memaparkan borang edit detail user
-    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    // Menerima data dari borang edit detail user dan update/kemaskini detail dalam db
-    Route::patch('users/{user}', [UserController::class, 'update'])->name('users.update');
-    // Digunakan untuk delete rekod
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
-    // Membership routing
-    Route::resource('memberships', MembershipController::class);
-
+    Route::get('memberships', [UserMembershipController::class, 'index'])->name('user.memberships.index');
+    Route::get('memberships/create', [UserMembershipController::class, 'create'])->name('user.memberships.create');
+    Route::post('memberships/create', [UserMembershipController::class, 'store'])->name('user.memberships.store');
 });
