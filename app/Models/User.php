@@ -28,7 +28,8 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'status'
+        'status',
+        'role'
     ];
 
     /**
@@ -53,5 +54,25 @@ class User extends Authenticatable
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public static function statusActive()
+    {
+        return self::where('status', '=', 'active')->count();
+    }
+
+    public static function statusInActive()
+    {
+        return self::where('status', '!=', 'active')->count();
+    }
+
+    public function isAdmin()
+    {
+        if (auth()->user()->role == 'admin')
+        {
+            return true;
+        }
+
+        return false;
     }
 }

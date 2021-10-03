@@ -42,10 +42,15 @@ class UserController extends Controller
 
         // Die and dump
         // dd($senaraiUsers);
+        // $userActive = User::where('status', '=', 'active')->count();
+        // $userInActive = User::where('status', '!=', 'active')->count();
+
+        $userActive = User::statusActive();
+        $userInActive = User::statusInActive();
 
         // Cara 1 nak pass variable ke template
         // return view('admin.users.index')->with('senaraiUsers', $senaraiUsers);
-        return view('admin.users.index');
+        return view('admin.users.index', compact('userActive', 'userInActive'));
     }
 
     /**
@@ -157,6 +162,13 @@ class UserController extends Controller
         $data = $request->validate([
             'membership_id' => ['required', 'integer']
         ]);
+
+        if ($user->subscriptions()
+        ->where('membership_id', '=', $request->membership_id)
+        ->count() > 0 )
+        {
+            return redirect()->back()->withErrors('Akaun user: ' . $user->name . ' telah pun ada subscription kepada membership id ' . $request->membership_id);
+        }
 
         // Cara pertama menerusi Subscription Model
         // Menerusi Model - protected $fillable

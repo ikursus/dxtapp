@@ -10,4 +10,16 @@ class Subscription extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'membership_id'];
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
+
+        // return $this->belongsTo(Membership::class, 'membership_id', 'id');
+    }
+
+    public static function totalSubscribed()
+    {
+        return self::count();
+    }
 }

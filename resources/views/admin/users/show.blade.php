@@ -36,6 +36,11 @@
                         <tr>
                             <td>Memberships</td>
                             <td>
+                                <ul>
+                                    @foreach ($user->subscriptions as $subscription)
+                                    <li>{{ $subscription->membership->name }}</li>
+                                    @endforeach
+                                </ul>
                                 <button type="button" class="btn btn-md btn-danger" data-toggle="modal" data-target="#modal-membership">Subscribe Membership</button>
 
                                 <!-- Modal Delete -->

@@ -17,7 +17,7 @@ Route::post('login', [LoginController::class, 'authenticate'])->name('login.chec
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group([
-    'middleware' => 'auth',
+    'middleware' => ['auth', 'checkAdminRole'],
     'prefix' => 'admin'
 ], function () {
 
@@ -45,6 +45,3 @@ Route::group([
     Route::resource('memberships', MembershipController::class);
 
 });
-
-
-

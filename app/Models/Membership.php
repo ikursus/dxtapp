@@ -10,4 +10,9 @@ class Membership extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'price'];
+
+    public static function totalPlan()
+    {
+        return self::count();
+    }
 }

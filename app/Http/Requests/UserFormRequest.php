@@ -30,7 +30,8 @@ class UserFormRequest extends FormRequest
                 'name' => ['required', 'min:3'],
                 // 'username' => ['required', 'unique:users,username,' . $this->user->id],
                 // 'email' => ['required', 'email:filter', 'unique:users,email,' . $this->user->id],
-                'status' => ['required', 'in:pending,active,banned']
+                'status' => ['required', 'in:pending,active,banned'],
+                'role' => ['required', 'in:admin,user']
             ];
         }
         // Validation untuk users.store
@@ -39,7 +40,8 @@ class UserFormRequest extends FormRequest
             'username' => ['required', 'unique:users,username'],
             'email' => ['required', 'unique:users,email', 'email:filter'],
             'password' => ['required', Password::min(3)],
-            'status' => ['required', 'in:pending,active,banned']
+            'status' => ['required', 'in:pending,active,banned'],
+            'role' => ['required', 'in:admin,user']
         ];
     }
 }

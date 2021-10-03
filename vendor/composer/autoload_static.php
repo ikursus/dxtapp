@@ -550,6 +550,7 @@ class ComposerStaticInitbbccc8c5e9c974cf1b8cddbfdbf17cf1
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DashboardController.php',
         'App\\Http\\Controllers\\Admin\\MembershipController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/MembershipController.php',
+        'App\\Http\\Controllers\\Admin\\SubscriptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/SubscriptionController.php',
         'App\\Http\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserController.php',
         'App\\Http\\Controllers\\Authentication\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Authentication/LoginController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',

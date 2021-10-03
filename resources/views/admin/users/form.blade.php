@@ -35,3 +35,18 @@
 
     </select>
 </div>
+
+<div class="form-group">
+    <label for="">ROLE</label>
+    <select name="role" class="form-control">
+        <option value="">--PILIH ROLE--</option>
+        @if (isset($user))
+        <option value="admin" {{ $user->role=='admin' ? 'selected="selected"' : null }}>ADMIN</option>
+        <option value="user" {{ $user->role=='user' ? 'selected="selected"' : null }}>USER</option>
+        @else
+        <option value="admin">ADMIN</option>
+        <option value="user">USER</option>
+        @endif
+
+    </select>
+</div>
